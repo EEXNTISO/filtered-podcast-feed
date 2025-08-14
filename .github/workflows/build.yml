@@ -1,7 +1,7 @@
 name: Build filtered RSS
 on:
   schedule:
-    - cron: "0 */6 * * *"   # toutes les 6h
+    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 jobs:
@@ -20,10 +20,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           python filter_feed.py
+          echo "=== Listing public/ ==="
+          ls -lah public || true
+          echo "=== Check feed.xml exists ==="
+          test -f public/feed.xml || (echo "feed.xml MISSING" && exit 1)
+          echo "=== Head of feed.xml ==="
+          head -n 20 public/feed.xml || true
       - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: ./public   # <- on publie UNIQUEMENT public/
   deploy:
     needs: build
     runs-on: ubuntu-latest
