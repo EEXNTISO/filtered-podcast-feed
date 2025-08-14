@@ -1,0 +1,12 @@
+[
+  {
+    "slug": "gdiy",
+    "source": "https://feeds.audiomeans.fr/feed/b4a5ee3a-9230-4f9f-988d-2ae156a2d5a9.xml",
+    "max_items": 50
+  },
+  {
+    "slug": "autre-show",
+    "source": "https://feeds.audiomeans.fr/feed/6feb767b-f765-4505-a945-a5b78a1f2972.xml",
+    "max_items": 50
+  }
+]
