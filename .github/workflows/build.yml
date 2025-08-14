@@ -1,7 +1,7 @@
 name: Build filtered RSS
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 */6 * * *"   # toutes les 6h
   workflow_dispatch:
 
 jobs:
@@ -22,14 +22,18 @@ jobs:
           python filter_feed.py
           echo "=== Listing public/ ==="
           ls -lah public || true
-          echo "=== Check feed.xml exists ==="
-          test -f public/feed.xml || (echo "feed.xml MISSING" && exit 1)
-          echo "=== Head of feed.xml ==="
-          head -n 20 public/feed.xml || true
+          echo "=== XML generated ==="
+          shopt -s nullglob
+          files=(public/*.xml)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No XML generated in public/"
+            exit 1
+          fi
+          printf '%s\n' "${files[@]::10}"
       - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public   # <- on publie UNIQUEMENT public/
+          path: ./public
   deploy:
     needs: build
     runs-on: ubuntu-latest
